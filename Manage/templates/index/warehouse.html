@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>采购入库</title>
+        <link rel="shortcut icon" href="/static/img/icon.ico" /><!--设置网页题目图标-->
+		<link rel="stylesheet" href="/static/css/ware_page.css" />
+        <link rel="stylesheet" href="/static/css/ware_manage.css" />
+        <script src="/static/js/time.js"></script>
+        <!--日期的css和js-->
+         <link href="/static/static_date/bootstrap3/css/bootstrap.css" rel="stylesheet" />
+        <link href="/static/static_date/assets/css/bootstrap-datepicker.css" rel="stylesheet" />
+
+	    <script src="/static/static_date/jquery/jquery-1.10.2.js" type="text/javascript"></script>
+	    <script src="/static/static_date/bootstrap3/js/bootstrap.js" type="text/javascript"></script>
+        <script src="/static/static_date/assets/js/bootstrap-datepicker.js"></script>
+
+	</head>
+
+	<body onload="auto()">
+		<div class="left">
+			<div class="bigTitle">农场苗圃管理系统</div>
+			<div class="lines">
+				<div id='1'onclick="pageClick(this.id)"><img src="/static/img/icon-1.png" />采购入库</div>
+				<div id='2'onclick="pageClick(this.id)"><img src="/static/img/icon-2.png" />采购明细</div>
+				<div id='3' onclick="pageClick(this.id)"><img src="/static/img/icon-3.png" />库存信息管理</div>
+                <div id='7' onclick="pageClick(this.id)"  class="active"><img src="/static/img/warehouse.png" />销售信息管理</div>
+				<div id='4' onclick="pageClick(this.id)"><img src="/static/img/icon-4.png" />网上求购信息</div>
+				<div id='5' onclick="pageClick(this.id)"><img src="/static/img/icon-5.png" />苗木价格分析</div>
+                <div id='6' onclick="pageClick(this.id)"><img src="/static/img/icon-6.png" />退出</div>
+			</div>
+		</div>
+		<div class="top">
+			<div class="leftTiyle" id="flTitle">销售信息管理</div>
+			<div class="thisUser">当前时间：<span id='date'></span></div>
+		</div>
+    <div class="content">
+
+        <input  id="showHidden" class="qiehuan" type="button" align="center" value="<-点击查看销售信息->" />
+        <div id="seedcontent" style="display:block">
+
+				<form action="http://127.0.0.1:8000/warehousein/" id="things_in" method="post">
+                    {% csrf_token %}
+                    <table class="seedcontent" border="1" cellspacing="0" >
+                        <tr>
+                            <td colspan="4" style="font-size: 30px;font-weight: bold">出售苗木记录表</td>
+                        </tr>
+                        <tr>
+                            <td align="right">名称：</td>
+                            <td style="padding-bottom: 5px">
+                                <input  type="text" name="name" />
+                            </td>
+                        </tr>
+                        <tr>
+                             <td align="right">等级：</td>
+                            <td>
+                                 <div class="styled-select">
+                                        <select name="level" id="level">
+                                            <option>一级</option>
+                                            <option>二级</option>
+                                            <option>三级</option>
+                                        </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">形态：</td>
+                            <td>
+                                 <div class="styled-select">
+                                <select name="xingtai" id="xingtai" >
+                                    <option value="独杆" >独杆</option>
+                                    <option value="丛生">丛生</option>
+                                </select>
+                                 </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">数量：</td>
+                            <td style="padding-bottom: 5px">
+                                <input type="text" name="number" placeholder="单位/棵"  />
+                            </td>
+                        </tr>
+
+                        <tr>
+                             <td align="right">销售时间：</td>
+                            <td align="center">
+                                <input class="datepicker"type="text" placeholder="2019-01-01"
+                                       name="time"  />
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <td align="right">粗度：</td>
+                            <td style="padding-bottom: 5px">
+                                <input type="text" name="width" placeholder="单位/cm"/>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td align="right">高度：</td>
+                            <td style="padding-bottom: 5px">
+                                 <input type="text" name="high"placeholder="单位/cm" />
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">联系电话：</td>
+                            <td style="padding-bottom: 5px">
+                                <input type="text" name="phone" />
+
+                            </td>
+                        </tr>
+                        <tr>
+                             <td align="right">运费：</td>
+                            <td style="padding-bottom: 5px">
+                                <input type="text" name="cost" placeholder="单位/元"/>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">单价：</td>
+                            <td>
+                                <input type="text" name="price" placeholder="单位/元"/>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td  colspan="2" style="padding-bottom: 10px;">
+                                <input class='button'type="reset" value="重置" >&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input class="button" type="submit" value="提交">
+                            </td>
+
+                        </tr>
+
+                    </table>
+                </form>
+			</div>
+
+			<div id="div2" style="display:none ;">
+					<table class="showtable" border="1" cellspacing="0">
+                    <tr  style="border: 0px">
+                        <td colspan="14" >
+                            <form action="http://127.0.0.1:8000/search_ware/" method="post">
+                                 {% csrf_token %}
+                             <input type="text" name="search" style=" height: 22px;width: 150px" id="search" placeholder="请输入关键字进行检索">
+                             <input name="submit" type="image" onclick="document.getElementById('search').submit();"href="javascript:;" style="width: 30px;height: 30px" align="center" src="/static/img/search.png" />
+                            </form>
+                         </td>
+                    </tr>
+                    <tr>
+                         <td>
+							<input type="button" value="名称" class="btn"/>
+						</td>
+						<td>
+							<input type="button" value="形态" class="btn"/>
+						</td>
+						<td>
+							<input type="button" value="粗度/cm" class="btn"/>
+						</td>
+						<td>
+							<input type="button" value="高度/m" class="btn"/>
+						</td>
+                        <td>
+							<input type="button" value="数量/棵" class="btn"/>
+						</td>
+						<td>
+							<input type="button" value="联系电话" style="font-size: 16px" class="btn"/>
+						</td>
+
+
+						<td>
+							<input type="button" value="运费/元" class="btn"/>
+						</td>
+                        <td>
+							<input type="button" value="时间" class="btn"/>
+						</td>
+						<td>
+							<input type="button" value="单价/元" class="btn"/>
+						</td>
+                        <td colspan="2">
+							<input type="button" value="操作" class="btn"/>
+						</td>
+
+                    </tr>
+
+                {% for t in data %}
+                    <tr  class={% if forloop.counter0|divisibleby:'2' %}
+                        evn
+                        {% else %}
+                        odd
+                        {% endif %}>
+						<td>{{ t.name }}</td>
+						<td>{{ t.xingtai }}</td>
+						<td>{{ t.width }}</td>
+						<td>{{ t.high }}</td>
+                        <td>{{ t.number }}</td>
+						<td>{{ t.phone }}</td>
+						<td>{{ t.address }}</td>
+						<td>{{ t.cost }}</td>
+						<td>{{ t.time }}</td>
+                        <td>{{ t.price }}</td>
+                        <td><a href='javascript:void(0)' id="{{ t.id }}" onclick="firm_ware(this.id)" class="button delete">删除</a></td>
+                        <td><a  href='javascript:void(0)'
+                              id="{{ t.id }}"  onclick="location.href='http://127.0.0.1:8000/edit_ware/?nid={{ t.id }}'" class="button edit">修改</a></td>
+					</tr>
+                {% endfor %}
+            </table>
+
+        </div>
+            <!--分页-->
+            <div class="page" style="float:left" >
+            {% if count == 1 %}
+
+                {% if number != 1 %}<a href="/show_warehouse/?pagenumber={{ per_number }}"><span>上一页</span></a>{% endif %}
+                {% for page in page_list %}
+                    <a href="/show_warehouse/?pagenumber={{ page }}"><span class="pc">{{ page }}</span></a>
+                {% endfor %}
+                {% if number != next_number %}<a href="/show_warehouse/?pagenumber={{ next_number}}"><span>下一页</span></a>{% endif %}
+            {% elif count == 2 %}
+                {% if number != 1 %}<a href="/search_ware/?pagenumber={{ per_number }}"><span>上一页</span></a>{% endif %}
+                {% for page in page_list %}
+                    <a href="/search_ware/?pagenumber={{ page }}"><span class="pc">{{ page }}</span></a>
+                {% endfor %}
+                {% if number != next_number %}<a href="/search_ware/?pagenumber={{ next_number}}"><span>下一页</span></a>{% endif %}
+
+            {% endif %}
+
+            </div>
+         </div>
+			</div>
+    </div>
+            <script type='text/javascript'>
+
+            function show_hidden(obj) {
+
+            　　if(obj.style.display == 'block') {
+
+            　　 obj.style.display = 'none';
+
+            　　} else {
+
+            　　　　　obj.style.display = 'block';
+
+            　　}
+
+            }
+
+            var sh = document.getElementById("showHidden");
+
+            sh.onclick = function() {
+
+            var div1 = document.getElementById("seedcontent");
+
+            var div2 = document.getElementById("div2");
+
+            show_hidden(div1);
+
+            show_hidden(div2);
+
+            return false;
+
+            }
+        </script>
+        <script type="text/javascript">
+	      $('.datepicker').datepicker({
+    	      weekStart:1,
+    	      color: 'blue'
+	        });
+	    </script>
+
+	</body>
+</html>

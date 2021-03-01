@@ -1,0 +1,51 @@
+
+			.table{
+				margin:auto;
+				background-color: white;
+				border: solid 2px #798ec9;
+
+			}
+
+			.evn{
+				background-color: white;
+				color: black;
+			}
+			.odd{
+				background-color: rgba(255,247,219,0.84);
+				color: black;
+			}
+			tr td{
+                height: 10%;
+				text-align: center;
+                style:"WORD-WRAP: break-word";
+                width: 70px;
+			}
+			.btn{
+				font-family: MicrosoftYaHei;
+				line-height: 15px;
+				font-size: 20px;
+				width: 80px;
+				height: 30px;
+				background-color: white;
+				border-radius: 5px;
+				font-weight: bold;
+				color: black;
+			}
+               #page .pc{
+                    width:34px;
+                    height:34px;
+                    border:1px solid #e1e2e3;
+                    cursor:pointer;
+
+                }
+               .page{
+                   position: fixed;
+                   bottom: 20px;
+                   left: 50%;
+               }
+
+            .showtable{
+	            position: fixed;
+                top: 100px;
+                style:"table-layout:fixed";
+           }

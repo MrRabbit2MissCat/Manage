@@ -1,0 +1,341 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    <title>苗木价格</title>
+    <link rel="icon" href="/static/img/icon.ico">
+    <link rel="stylesheet" href="/static/css/page.css" />
+    <script src="/static/js/time.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/static/chart_js/highcharts.js"></script>
+	<script src="/static/chart_js/exporting.js"></script>
+	<script src="/static/chart_js/drilldown.js"></script>
+	<script src="/static/chart_js/dark-unica.js"></script>
+
+
+</head>
+
+<body onload="auto()">
+        <script type="text/javascript">
+        $(document).ready(function(){
+              var x = document.getElementById("year").value;/* 如果你用的“变量”是input的话，这里就要写成.value了 */
+
+               $("#select_year").val(x);/* 这句话设置select中value为x的项被选中,例如$("#slt").val(“本科”)就表示<option>本科</option>被选中*/
+                alert(x)
+        });
+    </script>
+		<div class="left">
+			<div class="bigTitle">农场苗圃管理系统</div>
+			<div class="lines">
+				<div id='1'onclick="pageClick(this.id)" ><img src="/static/img/icon-1.png" />采购入库</div>
+				<div id='2'onclick="pageClick(this.id)"><img src="/static/img/icon-2.png" />采购明细</div>
+				<div id='3' onclick="pageClick(this.id)"><img src="/static/img/icon-3.png" />库存信息管理</div>
+                <div id='7' onclick="pageClick(this.id)"><img src="/static/img/warehouse.png" />销售信息管理</div>
+				<div id='4' onclick="pageClick(this.id)"><img src="/static/img/icon-4.png" />网上求购信息</div>
+				<div id='5' onclick="pageClick(this.id)"  class="active"><img src="/static/img/icon-5.png" />苗木价格分析</div>
+                <div id='6' onclick="pageClick(this.id)"><img src="/static/img/icon-6.png" />退出</div>
+			</div>
+		</div>
+		<div class="top">
+			<div class="leftTiyle" id="flTitle">苗木价格分析</div>
+			<div class="thisUser">当前时间：<span id='date'></span></div>
+		</div>
+    <div class="data_search" style="height: auto">
+        <form method="post" id="form1" action="http://127.0.0.1:8000/treat/">
+             {% csrf_token %}
+            <input type="hidden" value="{{ seclect_year }}" id="year"/>
+            <select id="select_year" name="select_year" style="height: 30px;width: auto; font-size: 18px ; margin: 0;padding: 0 1%">
+
+             <option style="text-align: center">2019</option>
+             <option style="text-align: center">2018</option>
+
+           </select>
+         <input name="submit" type="image" onclick="document.submit()
+            "href="javascript:;" style="width: 30px;height: 30px" align="center" src="/static/img/search.png" />
+        </form>
+    </div>
+	<div id="container" class="chart" style="min-width: 310px; height: 495px; margin-top: 0px ;">
+
+    </div>
+	<script>
+
+
+
+
+	Highcharts.chart('container', {
+	chart: {
+		type: 'column'
+	},
+	title: {
+		text: '{{ seclect_year }}年，几大类苗木的平均求购价格'
+	},
+	subtitle: {
+		text: '点击可查看更多数据，数据来源: <a href="http://www.yuanlin.com/">http://www.yuanlin.com</a>.'
+	},
+	xAxis: {
+		type: 'category'
+	},
+	yAxis: {
+		title: {
+			text: '平均价格/元'
+		}
+	},
+	legend: {
+		enabled: false
+	},
+	plotOptions: {
+		series: {
+			borderWidth: 0,
+			dataLabels: {
+				enabled: true,
+				format: '{point.y:.1f}元'
+			}
+		}
+	},
+	tooltip: {
+		headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+		pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b>元<br/>'
+	},
+	series: [{
+		name: '苗木名称',
+		colorByPoint: true,
+		data: [{
+			name: '玉兰',
+			y: {{ average_year_yulan }},
+			drilldown: '玉兰'
+		}, {
+			name: '海棠',
+			y: {{ average_year_haitang }},
+			drilldown: '海棠'
+		}, {
+			name: '五角枫',
+			y: {{ average_year_wujiaofeng }},
+			drilldown: '五角枫'
+		}, {
+			name: '丁香',
+			y: {{ average_year_dingxiang }},
+			drilldown: '丁香'
+		}
+        ]
+	}],
+	drilldown: {
+		series: [{
+			name: '玉兰',
+			id: '玉兰',
+			data: [
+				[
+					'一月',
+                    {{ month_yuan_jan_average }}
+				],
+				[
+					'二月',
+                    {{ month_yuan_feb_average }}
+				],
+				[
+					'三月',
+					{{ month_yuan_mar_average }}
+				],
+				[
+					'四月',
+					{{ month_yuan_apr_average }}
+				],
+				[
+					'五月',
+					{{ month_yuan_may_average}}
+				],
+				[
+					'六月',
+					{{ month_yuan_jun_average }}
+				],
+                [
+					'七月',
+                    {{ month_yuan_jul_average }}
+				],
+				[
+					'八月',
+                    {{ month_yuan_aug_average }}
+				],
+				[
+					'九月',
+					{{ month_yuan_sep_average }}
+				],
+				[
+					'十月',
+					{{ month_yuan_oct_average }}
+				],
+				[
+					'十一月',
+					{{ month_yuan_nov_average }}
+				],
+				[
+					'十二月',
+					{{ month_yuan_dec_average }}
+				]
+			]
+		}, {
+			name: '海棠',
+			id: '海棠',
+			data: [
+				[
+					'一月',
+                    {{ month_haitang_jan_average }}
+				],
+				[
+					'二月',
+                    {{ month_haitang_feb_average }}
+				],
+				[
+					'三月',
+					{{ month_haitang_mar_average }}
+				],
+				[
+					'四月',
+					{{ month_haitang_apr_average }}
+				],
+				[
+					'五月',
+					{{ month_haitang_may_average}}
+				],
+				[
+					'六月',
+					{{ month_haitang_jun_average }}
+				],
+                [
+					'七月',
+                    {{ month_haitang_jul_average }}
+				],
+				[
+					'八月',
+                    {{ month_haitang_aug_average }}
+				],
+				[
+					'九月',
+					{{ month_haitang_sep_average }}
+				],
+				[
+					'十月',
+					{{ month_haitang_oct_average }}
+				],
+				[
+					'十一月',
+					{{ month_haitang_nov_average }}
+				],
+				[
+					'十二月',
+					{{ month_haitang_dec_average }}
+				]
+			]
+		}, {
+			name: '五角枫',
+			id: '五角枫',
+			data: [
+				[
+					'一月',
+                    {{ month_wujiaofeng_jan_average }}
+				],
+				[
+					'二月',
+                    {{ month_wujiaofeng_feb_average }}
+				],
+				[
+					'三月',
+					{{ month_wujiaofeng_mar_average }}
+				],
+				[
+					'四月',
+					{{ month_wujiaofeng_apr_average }}
+				],
+				[
+					'五月',
+					{{ month_wujiaofeng_may_average}}
+				],
+				[
+					'六月',
+					{{ month_wujiaofeng_jun_average }}
+				],
+                [
+					'七月',
+                    {{ month_wujiaofeng_jul_average }}
+				],
+				[
+					'八月',
+                    {{ month_wujiaofeng_aug_average }}
+				],
+				[
+					'九月',
+					{{ month_wujiaofeng_sep_average }}
+				],
+				[
+					'十月',
+					{{ month_wujiaofeng_oct_average }}
+				],
+				[
+					'十一月',
+					{{ month_wujiaofeng_nov_average }}
+				],
+				[
+					'十二月',
+					{{ month_wujiaofeng_dec_average }}
+				]
+			]
+		}, {
+			name: '丁香',
+			id: '丁香',
+			data: [
+				[
+					'一月',
+                    {{ month_dingxiang_jan_average }}
+				],
+				[
+					'二月',
+                    {{ month_dingxiang_feb_average }}
+				],
+				[
+					'三月',
+					{{ month_dingxiang_mar_average }}
+				],
+				[
+					'四月',
+					{{ month_dingxiang_apr_average }}
+				],
+				[
+					'五月',
+					{{ month_dingxiang_may_average}}
+				],
+				[
+					'六月',
+					{{ month_dingxiang_jun_average }}
+				],
+                [
+					'七月',
+                    {{ month_dingxiang_jul_average }}
+				],
+				[
+					'八月',
+                    {{ month_dingxiang_aug_average }}
+				],
+				[
+					'九月',
+					{{ month_dingxiang_sep_average }}
+				],
+				[
+					'十月',
+					{{ month_dingxiang_oct_average }}
+				],
+				[
+					'十一月',
+					{{ month_dingxiang_nov_average }}
+				],
+				[
+					'十二月',
+					{{ month_dingxiang_dec_average }}
+				]
+			]
+		}]
+	},exporting: { enabled: false },//隐藏导出图片
+credits: { enabled: false }//隐藏highcharts的站点标志
+}
+);</script>
+</body>
+</html>

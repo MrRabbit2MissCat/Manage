@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>采购明细</title>
+        <link rel="shortcut icon" href="/static/img/icon.ico" /><!--设置网页题目图标-->
+		<link rel="stylesheet" href="/static/css/page.css" />
+        <link rel="stylesheet" href="/static/css/show_data.css">
+        <script src="/static/js/time.js"></script>
+	</head>
+
+	<body onload="auto()">
+		<div class="left">
+			<div class="bigTitle">农场苗圃管理系统</div>
+			<div class="lines">
+				<div id='1'onclick="pageClick(this.id)" ><img src="/static/img/icon-1.png" />采购入库</div>
+				<div id='2'onclick="pageClick(this.id)"><img src="/static/img/icon-2.png" />采购明细</div>
+				<div id='3' onclick="pageClick(this.id)"><img src="/static/img/icon-3.png" />库存信息管理</div>
+                <div id='7' onclick="pageClick(this.id)"><img src="/static/img/warehouse.png" />销售信息管理</div>
+				<div id='4' onclick="pageClick(this.id)" class="active"><img src="/static/img/icon-4.png" />网上求购信息</div>
+				<div id='5' onclick="pageClick(this.id)"><img src="/static/img/icon-5.png" />苗木价格分析</div>
+                <div id='6' onclick="pageClick(this.id)"><img src="/static/img/icon-6.png" />退出</div>
+			</div>
+		</div>
+		<div class="top">
+			<div class="leftTiyle" id="flTitle">网上求购信息</div>
+			<div class="thisUser">当前时间：<span id='date'></span></div>
+		</div>
+         <div class="back" align="center" >
+		     <div class="content">
+            <table class="showtable" border="1" cellspacing="0">
+                    <tr  style="border: 0px">
+                        <td colspan="12" >
+                            <form action="http://127.0.0.1:8000/search_data/" method="post">
+                                 {% csrf_token %}
+                             <input type="text" name="search" style=" height: 22px" id="search" placeholder="请输入关键字进行检索">
+                             <input name="submit" type="image" onclick="document.getElementById('search').submit();"href="javascript:;" style="width: 30px;height: 30px" align="center" src="/static/img/search.png" />
+                            </form>
+                         </td>
+                    </tr>
+                    <tr>
+                        <td>
+							<input type="button" value="序号" class="btn"/>
+						</td>
+                         <td>
+							<input type="button" value="名称" class="btn"/>
+						</td>
+						<td>
+							<input type="button" value="米径" class="btn"/>
+						</td>
+						<td>
+							<input type="button" value="高度" class="btn"/>
+						</td>
+						<td>
+							<input type="button" value="冠幅" class="btn"/>
+						</td>
+						<td>
+							<input type="button" value="地径/cm" class="btn"/>
+						</td>
+                        <td>
+							<input type="button" value="价格/元" class="btn"/>
+						</td>
+						<td>
+							<input type="button" value="单位"  class="btn"/>
+						</td>
+						<td>
+							<input type="button" value="公司" class="btn"/>
+						</td>
+						<td>
+							<input type="button" value="备注" class="btn"/>
+						</td>
+                        <td>
+							<input type="button" value="时间" class="btn"/>
+						</td>
+                    </tr>
+
+                {% for t in data %}
+                    <tr class={% if forloop.counter0|divisibleby:'2' %}
+                        evn
+                        {% else %}
+                        odd
+                        {% endif %}>
+                        <td>{{ forloop.counter }}</td>
+						<td>{{ t.productname }}</td>
+                        <td>{{ t.mj           }}</td>
+						<td>{{ t.high        }}</td>
+						<td>{{ t.crown       }}</td>
+						<td>{{ t.dj          }}</td>
+						<td>{{ t.price       }}</td>
+                        <td>{{ t.unit        }}</td>
+						<td >{{ t.company     }}</td>
+						<td>{{ t.note        }}</td>
+						<td>{{ t.time        }}</td>
+
+					</tr>
+                {% endfor %}
+            </table>
+
+        </div>
+            <div class="page" style="float:left" >
+            {% if count == 1 %}
+
+                {% if number != 1 %}<a href="/show_data/?pagenumber={{ per_number }}"><span>上一页</span></a>{% endif %}
+                {% for page in page_list %}
+                    <a href="/show_data/?pagenumber={{ page }}"><span class="pc">{{ page }}</span></a>
+                {% endfor %}
+                {% if number != next_number %}<a href="/show_data/?pagenumber={{ next_number}}"><span>下一页</span></a>{% endif %}
+            {% elif count == 2 %}
+                {% if number != 1 %}<a href="/search_data/?pagenumber={{ per_number }}"><span>上一页</span></a>{% endif %}
+                {% for page in page_list %}
+                    <a href="/search_data/?pagenumber={{ page }}"><span class="pc">{{ page }}</span></a>
+                {% endfor %}
+                {% if number != next_number %}<a href="/search_data/?pagenumber={{ next_number}}"><span>下一页</span></a>{% endif %}
+
+            {% endif %}
+
+            </div>
+         </div>
+
+	</body>
+</html>
